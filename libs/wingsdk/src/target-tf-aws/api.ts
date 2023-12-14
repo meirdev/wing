@@ -46,7 +46,7 @@ export class Api extends cloud.Api implements IAwsApi {
     super(scope, id, props);
     this.api = new WingRestApi(this, "api", {
       getApiSpec: this._getOpenApiSpec.bind(this),
-      cors: this.corsOptions,
+      cors: props.cors ? this.corsOptions : undefined,
     });
   }
 
@@ -322,7 +322,10 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    const defaultResponse = props.cors
+      ? API_CORS_DEFAULT_RESPONSE(props.cors)
+      : {};
+    // const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),

@@ -34,7 +34,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
-      message: `Invoke (payload=${JSON.stringify(payload)}).`,
+      message: `me Invoke (payload=${payload}).`,
       activity: async () => {
         const sb = new Sandbox(this.filename, {
           env: {
@@ -53,7 +53,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           },
         });
 
-        return sb.call("handler", JSON.stringify(payload));
+        console.log(payload);
+
+        return sb.call("handler", payload);
       },
     });
   }

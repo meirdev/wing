@@ -14,6 +14,15 @@ apiDefaultCors.get("/users", inflight (req) => {
   };
 });
 
+let apiWithoutCors = new cloud.Api() as "no-cors";
+
+apiWithoutCors.get("/:id", inflight (req) => {
+  return {
+    body: "ok",
+    status: 200
+  };
+});
+
 test "GET /users has default cors headers" {
   let response = http.get(apiDefaultCors.url + "/users");
 
@@ -48,3 +57,9 @@ test "OPTIONS /users has default cors headers" {
  expect.nil(headers.tryGet("access-control-expose-headers"));
 }
 
+test "GET /123 test api with variable" {
+  let response = http.get(apiWithoutCors.url + "/123");
+
+  let headers = response.headers;
+  expect.equal(response.status, 200);
+}
